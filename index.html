@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Guesser!</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        html {
+            background-color: indigo;
+            color: aqua;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            font-size: 62.5%;
+        }
+
+        body {
+            padding: 5rem;
+        }
+
+        input {
+            /* width: 10rem; */
+            padding: 2rem 3rem;
+            margin: 2rem;
+        }
+
+        h1, h2 {
+            font-weight: 100;
+            text-align: center;
+            padding: 1.6rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 1.9rem;
+        }
+
+        .resultado {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.733);
+            top: 0;
+            left: 0;
+        }
+
+        .resultado-wrapper {
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            top: 50%;
+            left: 50%;
+            background-color: blueviolet;
+            transform: translate(-50%,-50%);
+            padding: 25px;
+        }
+
+        .resultado p {
+            font-size: 1.5rem;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pense em uma carta e eu tentarei adivinhá-la.</h1>
+    <h2>Quando estiver pronto, clique em OK!</h2>
+    <input type="button" name="okBtn" id="okBtn" value="OK!">
+
+    <div class="resultado hidden" id="output">
+        <div class="resultado-wrapper">
+            <p id="outputText">O seu resultado foi esse?</p>
+            <div class="btns">
+                <input type="button" name="yesBtn" id="yesBtn" value="Sim!">
+                <input type="button" name="noBtn" id="noBtn" value="Não!"> 
+            </div>
+        </div>        
+    </div>
+
+    <div class="resultado hidden" id="playAgain">
+        <div class="resultado-wrapper">
+            <p>Há! <span id="contador"></span></p>
+            <div class="btns">
+                <input type="button" name="tryAgain" id="tryAgain" value="Jogar novamente">
+            </div>
+        </div>
+    </div>
+    <script>
+        const naipes = ['copas', 'paus', 'ouros', 'espadas'];
+        const cartas = ['ás', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove', 'dez', 'valete', 'dama', 'rei'];
+
+        const btnStart = document.querySelector('#okBtn');
+        const yesBtn = document.querySelector('#yesBtn');
+        const noBtn = document.querySelector('#noBtn');
+        const output = document.querySelector('#output');
+        const outputText = document.querySelector('#outputText');
+        const tryAgain = document.querySelector('#tryAgain');
+        const playAgain = document.querySelector('#playAgain');
+        const contador = document.querySelector('#contador');
+
+        let contadorJogadas = 0;
+
+        btnStart.addEventListener('click', () => {
+            contadorJogadas++;
+            exibir();
+        })
+
+        let exibir = function() {
+            const randNaipe = Math.round(Math.random() * 3);
+            const randCartas = Math.round(Math.random() * 12)
+            console.log(randNaipe);
+            console.log(randCartas);
+            outputText.innerText = `Sua carta é ${cartas[randCartas]} de ${naipes[randNaipe]}?`
+            output.classList.remove('hidden');
+            btnStart.setAttribute('disabled', 'true');
+        };
+
+        yesBtn.addEventListener('click', () => {
+            output.classList.add('hidden');
+            playAgain.classList.remove('hidden');
+            if (contadorJogadas > 1) {
+                contador.innerText = `Foram necessárias ${contadorJogadas} tentativas até acertar!`;
+                contadorJogadas = 1;
+            } else {
+                contador.innerText = `Foi necessário somente ${contadorJogadas} tentativa até acertar!`;
+                contadorJogadas = 1;
+            }
+        });
+
+        noBtn.addEventListener('click', () => {
+            exibir();
+            contadorJogadas++;
+        });
+
+        tryAgain.addEventListener('click', () => {
+            exibir();
+            playAgain.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>
